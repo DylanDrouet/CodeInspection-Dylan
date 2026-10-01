@@ -1,25 +1,33 @@
 package labcodeinspection;
 
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Email {
 
-	private String m_firstName;
-	private String m_lastName;
+	private static final Logger LOGGER = Logger.getLogger(Email.class.getName());
+
+	private String firstName;
+	private String lastName;
 	private String password = null;
 	private String department;
-	private int defaultpasswordLength = 8;
-	private String email;
+	private int defaultLen = 8;
+	private String emailAddress;
 
-	public Email(String firstName, String lastName) {
-		this.m_firstName = firstName;
-		this.m_lastName = lastName;
+	public Email(final String firstName, final String lastName) {
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 
 	public void showInfo() {
-		System.out.println("\nFIRST NAME= " + m_firstName + "\nLAST NAME= " + m_lastName);
-		System.out.println("DEPARMENT= " + department + "\nEMAIL= " + email + "\nPASSWORD= " + password);
+		if (LOGGER.isLoggable(Level.INFO)) {
+			LOGGER.info("\nFIRST NAME= " + firstName + "\nLAST NAME= " + lastName);
+			LOGGER.info("DEPARTMENT= " + department + "\nEMAIL= " + emailAddress + "\nPASSWORD= " + password);
+		}
 	}
 
-	public void setDeparment(int depChoice) {
+	public void setDeparment(final int depChoice) {
 		switch (depChoice) {
 		case 1:
 			this.department = "sales";
@@ -30,22 +38,30 @@ public class Email {
 		case 3:
 			this.department = "acct";
 			break;
+		default:
+			this.department = "unknown";
+			break;
 		}
 	}
 
-	private String randomPassword(int length) {
-		String set = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890#$&@*";
-		char[] password = new char[length];
+	private String randomPassword(final int length) {
+		final String set = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890#$&@*";
+		final char[] password = new char[length];
+
 		for (int i = 0; i < length; i++) {
-			int rand = (int) (Math.random() * set.length());
+			final int rand = (int) (Math.random() * set.length());
 			password[i] = set.charAt(rand);
 		}
+
 		return new String(password);
 	}
 
 	public void generateEmail() {
-		this.password = this.randomPassword(this.defaultpasswordLength);
-		this.email = this.m_firstName.toLowerCase() + this.m_lastName.toLowerCase() + "@" + this.department
+		this.password = this.randomPassword(this.defaultLen);
+		this.emailAddress = this.firstName.toLowerCase(Locale.ROOT)
+				+ this.lastName.toLowerCase(Locale.ROOT)
+				+ "@"
+				+ this.department
 				+ ".espol.edu.ec";
 	}
 }
